@@ -21,6 +21,21 @@
         app:srcCompat="@drawable/background" />
 
 
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Score: 0"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.594"
+        tools:ignore="MissingConstraints" />
+
     <ImageView
         android:id="@+id/pauseImageView"
         android:layout_width="68dp"
@@ -48,19 +63,7 @@
         app:layout_constraintVertical_bias="0.393"
         tools:ignore="MissingConstraints" />
 
-    <EditText
-        android:id="@+id/userAnswerEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/subtractionExerciseTextView"
-        android:layout_centerHorizontal="true"
-        android:inputType="number"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.551" />
+
 
     <GridLayout
         android:id="@+id/gridLayout"
@@ -208,6 +211,40 @@
 
     </GridLayout>
 
+    <TextView
+        android:id="@+id/userInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+    <TextView
+        android:id="@+id/taskBefore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="0.327" />
+
+    <TextView
+        android:id="@+id/taskBefore2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="0.264" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
