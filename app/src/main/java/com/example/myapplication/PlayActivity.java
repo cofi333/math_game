@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +24,8 @@ public class PlayActivity extends AppCompatActivity {
     TextView taskBefore;
     TextView taskBefore2;
     TextView subtractionExerciseTextView;
+
+    ImageView pauseButton;
     int correctAnswer;
     int lengthOfCorrectAnswer;
     int lengthOfUserAnswer;
@@ -61,8 +65,16 @@ public class PlayActivity extends AppCompatActivity {
         taskBefore = findViewById(R.id.taskBefore);
         taskBefore2 = findViewById(R.id.taskBefore2);
         subtractionExerciseTextView = findViewById(R.id.subtractionExerciseTextView);
+        pauseButton = findViewById(R.id.pauseImageView);
 
         generateTaskLevel1();
+
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(PlayActivity.this, PauseActivity.class));
+            }
+        });
 
 
         for (int i = 0; i <= 9; i++) {
