@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -11,14 +12,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.util.Random;
 
 public class PlayActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private CircularProgressBar circularProgressBar;
+    private static final long TIMER_DURATION = 30000; // 30 seconds
+    private CountDownTimer countDownTimer;
     TextView scoreTextView;
     TextView userAnswerEditText;
     TextView taskBefore;
@@ -30,6 +38,8 @@ public class PlayActivity extends AppCompatActivity {
     int lengthOfCorrectAnswer;
     int lengthOfUserAnswer;
     int score;
+    float oneStepForOneSecond;
+    int totalSeconds;
     public Button b0;
     public Button b1;
     public Button b2;
@@ -66,8 +76,10 @@ public class PlayActivity extends AppCompatActivity {
         taskBefore2 = findViewById(R.id.taskBefore2);
         subtractionExerciseTextView = findViewById(R.id.subtractionExerciseTextView);
         pauseButton = findViewById(R.id.pauseImageView);
+        circularProgressBar = findViewById(R.id.circularProgressBar);
 
         generateTaskLevel1();
+        startTimer();
 
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,9 +170,28 @@ public class PlayActivity extends AppCompatActivity {
         return false;
     }
 
+    private void startTimer() {
 
+        totalSeconds = (int) (TIMER_DURATION / 1000);
+        oneStepForOneSecond = (360.0f / totalSeconds);
+        countDownTimer = new CountDownTimer(TIMER_DURATION, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int remainingSeconds = (int) (millisUntilFinished / 1000);
+                int progress = (int) (oneStepForOneSecond * (totalSeconds - remainingSeconds));
+                circularProgressBar.setProgress(progress);
+                circularProgressBar.setProgressMax(360);
+                circularProgressBar.invalidate();
+            }
 
+            @Override
+            public void onFinish() {
+                // Timer finished, perform actions here
+                Toast.makeText(PlayActivity.this, "Timer finished!", Toast.LENGTH_SHORT).show();
+            }
+        };
 
-
+        countDownTimer.start();
+    }
 
 }
