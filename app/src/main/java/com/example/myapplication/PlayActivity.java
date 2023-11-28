@@ -25,7 +25,10 @@ public class PlayActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private CircularProgressBar circularProgressBar;
-    private static final long TIMER_DURATION = 30000; // 30 seconds
+
+     // Add this variable
+
+    private static long TIMER_DURATION = 30000; // 30 seconds
     private CountDownTimer countDownTimer;
     TextView scoreTextView;
     TextView userAnswerEditText;
@@ -118,6 +121,8 @@ public class PlayActivity extends AppCompatActivity {
                         } else {
                             taskBefore2.setTextColor(taskBefore.getCurrentTextColor());
                             taskBefore.setTextColor(Color.parseColor("#FF0000"));
+                            decrementTimer(5000);
+
 
                         }
                         String task1 =String.valueOf(subtractionExerciseTextView.getText());
@@ -159,7 +164,7 @@ public class PlayActivity extends AppCompatActivity {
         TextView userAnswerEditText = findViewById(R.id.userInput);
         subtractionExerciseTextView.setText(operand1 + " + " + operand2 + "");
 
-       userAnswerEditText.setText("");
+        userAnswerEditText.setText("");
     }
 
     private boolean checkAnswer(int correctAnswer, int userAnswer) {
@@ -170,15 +175,22 @@ public class PlayActivity extends AppCompatActivity {
         return false;
     }
 
+  // Add this variable
+  private int initialProgress;
     private void startTimer() {
-
-        totalSeconds = (int) (TIMER_DURATION / 1000);
+        totalSeconds = (int) (30000 / 1000);
         oneStepForOneSecond = (360.0f / totalSeconds);
+        initialProgress = 360;  // Set the initial progress to the full circle
+
         countDownTimer = new CountDownTimer(TIMER_DURATION, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                int remainingSeconds = (int) (millisUntilFinished / 1000);
-                int progress = (int) (oneStepForOneSecond * (totalSeconds - remainingSeconds));
+                TIMER_DURATION = millisUntilFinished;
+                Log.d(TAG, "Remaining Time: " + TIMER_DURATION);
+
+                // Calculate progress based on the initial progress and the elapsed time
+                int elapsedSeconds = (int) ((TIMER_DURATION / 1000));
+                int progress = (int) (initialProgress-(oneStepForOneSecond * elapsedSeconds));
                 circularProgressBar.setProgress(progress);
                 circularProgressBar.setProgressMax(360);
                 circularProgressBar.invalidate();
@@ -188,10 +200,57 @@ public class PlayActivity extends AppCompatActivity {
             public void onFinish() {
                 // Timer finished, perform actions here
                 Toast.makeText(PlayActivity.this, "Timer finished!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(PlayActivity.this, PauseActivity.class));
             }
         };
 
         countDownTimer.start();
     }
 
+    private void decrementTimer(long decrementValue) {
+        // Decrement the timer duration by the specified value
+        TIMER_DURATION -= decrementValue;
+        // Ensure the timer does not go below 0
+        TIMER_DURATION = Math.max(TIMER_DURATION, 0);
+
+        // Calculate the initial progress based on the remaining time
+        initialProgress = (int) ((TIMER_DURATION / 1000) * oneStepForOneSecond);
+
+        // Update the progress bar without restarting the timer
+//        circularProgressBar.setProgress(initialProgress);
+//        circularProgressBar.setProgressMax(360);
+//        circularProgressBar.invalidate();
+
+        Log.d(TAG, "Progress: " + initialProgress);
+        countDownTimer.cancel();
+        // Restart the timer with the updated progress
+        startTimer();
+    }
+
+
+//    private void updateTimer() {
+//        long minutes = (timeRemainingInMillis / 1000) / 60;
+//        long seconds = (timeRemainingInMillis / 1000) % 60;
+//
+//        String timeFormatted = String.format("%02d:%02d", minutes, seconds);
+//        TextView timerTextView = findViewById(R.id.timerTextView);
+//        timerTextView.setText(timeFormatted);
+//    }
+
 }
+
+//    private void decrementTimer(long decrementValue) {
+//        // Decrement the timer duration by the specified value
+//        TIMER_DURATION -= decrementValue;
+//        // Ensure the timer does not go below 0
+//        TIMER_DURATION = Math.max(TIMER_DURATION, 0);
+//
+//        // Update the progress bar directly
+//        int remainingSeconds = (int) (TIMER_DURATION / 1000);
+//        int progress = (int) (360 - oneStepForOneSecond * remainingSeconds);
+//        circularProgressBar.setProgress(progress);
+//        circularProgressBar.setProgressMax(360);
+//        circularProgressBar.invalidate();
+//
+//        Log.d(TAG, "Remaining Time: " + TIMER_DURATION);
+//    }
