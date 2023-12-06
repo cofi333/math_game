@@ -1,0 +1,32 @@
+{
+	"info": {
+		"_postman_id": "f0564952-48f6-48e8-b9fc-b63594a8a140",
+		"name": "Math_Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "31279116"
+	},
+	"item": [
+		{
+			"name": "GET Scores",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost/math_game/api/scores/"
+			},
+			"response": []
+		},
+		{
+			"name": "POST NewScore",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"newUser\",\r\n    \"score\" : \"635\"\r\n}"
+				},
+				"url": "http://localhost/math_game/api/scores/"
+			},
+			"response": []
+		}
+	]
+}

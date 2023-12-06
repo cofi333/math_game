@@ -30,3 +30,4 @@ function connectDatabase(string $dsn, array $pdoOptions): PDO
 }
 
 $methods = ['get', 'post', 'patch', 'delete'];
+$tables = ['scores'];
