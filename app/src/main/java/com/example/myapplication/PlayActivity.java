@@ -1,21 +1,27 @@
 package com.example.myapplication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
@@ -26,15 +32,20 @@ public class PlayActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private CircularProgressBar circularProgressBar;
 
-     // Add this variable
+    // Add this variable
 
     private static long TIMER_DURATION = 30000; // 30 seconds
+    private int whatTask=1;
     private CountDownTimer countDownTimer;
+
     TextView scoreTextView;
     TextView userAnswerEditText;
     TextView taskBefore;
     TextView taskBefore2;
     TextView subtractionExerciseTextView;
+    private PopupWindow popupWindow;
+    private Button closeButton;
+    private View popupView;
 
     ImageView pauseButton;
     int correctAnswer;
@@ -55,12 +66,106 @@ public class PlayActivity extends AppCompatActivity {
     public Button b9;
     public Button bDel;
 
+    public void showPopupWindow() {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.popup_layout, null);
+
+        // Access views in the popup layout
+//        TextView popupTextView = popupView.findViewById(R.id.popupTextView);
+        Button closeButton = popupView.findViewById(R.id.closeButton);
+
+
+        // Create the PopupWindow
+        popupWindow = new PopupWindow(
+                popupView,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        int popupWidthInDp = 300; // Adjust this value as needed
+        int popupHeightInDp = 500; // Adjust this value as needed
+
+        // Convert dp to pixels
+        float density = getResources().getDisplayMetrics().density;
+        int popupWidthInPixels = (int) (popupWidthInDp * density);
+        int popupHeightInPixels = (int) (popupHeightInDp * density);
+
+        // Set width and height in pixels
+        popupWindow.setWidth(popupWidthInPixels);
+        popupWindow.setHeight(popupHeightInPixels);
+
+        View backgroundView = new View(PlayActivity.this);
+        backgroundView.setBackgroundColor(ContextCompat.getColor(PlayActivity.this, android.R.color.black));
+        backgroundView.setAlpha(0.5f);
+
+        // Add the background view to the root layout
+        ViewGroup rootView = findViewById(android.R.id.content);
+        rootView.addView(backgroundView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        // Dismiss the popup window and remove the background when clicked outside of it
+        backgroundView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                rootView.removeView(backgroundView);
+            }
+        });
+        // Set up the close button or other interactions
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+                backgroundView.setAlpha(0f);
+            }
+        });
+
+        // Show the pop-up window at a specific location
+        popupWindow.showAtLocation(findViewById(R.id.activity_play_relay), Gravity.CENTER, 0, 0);
+
+        // Dismiss the pop-up window when clicked outside of it
+//        popupView.setOnTouchListener((v, event) -> {
+//            popupWindow.dismiss();
+//
+//            return true;
+//        });
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                restartTimer();
+            }
+        });
+    }
+
+
+
+    // Method to handle button click inside the popup
+    public void onCloseButtonClick(View view) {
+        popupWindow.dismiss();
+
+    }
+    private void restartTimer() {
+        Log.d(TAG, "restartTimer called");
+        TIMER_DURATION = Math.max(TIMER_DURATION, 0);
+        initialProgress = (int) ((TIMER_DURATION / 1000) * oneStepForOneSecond);
+
+        Log.d(TAG, "Progress: " + initialProgress);
+
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
+        startTimer();
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        popupView = inflater.inflate(R.layout.popup_layout, null);
 
         userAnswerEditText = findViewById(R.id.userInput);
         b0 = findViewById(R.id.btn0);
@@ -84,10 +189,14 @@ public class PlayActivity extends AppCompatActivity {
         generateTaskLevel1();
         startTimer();
 
+
+
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(PlayActivity.this, PauseActivity.class));
+//                startActivity(new Intent(PlayActivity.this, PauseActivity.class));
+                countDownTimer.cancel();
+                showPopupWindow();
             }
         });
 
@@ -129,7 +238,19 @@ public class PlayActivity extends AppCompatActivity {
                         String task2 = String.valueOf(taskBefore.getText());
                         taskBefore2.setText(task2);
                         taskBefore.setText(task1);
-                        generateTaskLevel1();
+                        //neki if (if i=1 pokreni task 1 ako je 2 onda pokreni task 2
+                        if(whatTask<2)
+                        {
+                            generateTaskLevel1();
+                            whatTask+=1;
+
+                        }
+                        else {
+
+                            countDownTimer.cancel();
+                            showPopupWindow();
+                        }
+
 
                     }
 
@@ -147,6 +268,14 @@ public class PlayActivity extends AppCompatActivity {
                 }
             });
         }
+
+        closeButton = popupView.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCloseButtonClick(v);
+            }
+        });
 
 
 
@@ -175,9 +304,10 @@ public class PlayActivity extends AppCompatActivity {
         return false;
     }
 
-  // Add this variable
-  private int initialProgress;
+    // Add this variable
+    private int initialProgress;
     private void startTimer() {
+        Log.d(TAG, "start timer called");
         totalSeconds = (int) (30000 / 1000);
         oneStepForOneSecond = (360.0f / totalSeconds);
         initialProgress = 360;  // Set the initial progress to the full circle
@@ -207,50 +337,18 @@ public class PlayActivity extends AppCompatActivity {
         countDownTimer.start();
     }
 
+
+
     private void decrementTimer(long decrementValue) {
-        // Decrement the timer duration by the specified value
         TIMER_DURATION -= decrementValue;
-        // Ensure the timer does not go below 0
         TIMER_DURATION = Math.max(TIMER_DURATION, 0);
 
-        // Calculate the initial progress based on the remaining time
         initialProgress = (int) ((TIMER_DURATION / 1000) * oneStepForOneSecond);
 
-        // Update the progress bar without restarting the timer
-//        circularProgressBar.setProgress(initialProgress);
-//        circularProgressBar.setProgressMax(360);
-//        circularProgressBar.invalidate();
 
         Log.d(TAG, "Progress: " + initialProgress);
         countDownTimer.cancel();
-        // Restart the timer with the updated progress
         startTimer();
     }
-
-
-//    private void updateTimer() {
-//        long minutes = (timeRemainingInMillis / 1000) / 60;
-//        long seconds = (timeRemainingInMillis / 1000) % 60;
-//
-//        String timeFormatted = String.format("%02d:%02d", minutes, seconds);
-//        TextView timerTextView = findViewById(R.id.timerTextView);
-//        timerTextView.setText(timeFormatted);
-//    }
-
 }
 
-//    private void decrementTimer(long decrementValue) {
-//        // Decrement the timer duration by the specified value
-//        TIMER_DURATION -= decrementValue;
-//        // Ensure the timer does not go below 0
-//        TIMER_DURATION = Math.max(TIMER_DURATION, 0);
-//
-//        // Update the progress bar directly
-//        int remainingSeconds = (int) (TIMER_DURATION / 1000);
-//        int progress = (int) (360 - oneStepForOneSecond * remainingSeconds);
-//        circularProgressBar.setProgress(progress);
-//        circularProgressBar.setProgressMax(360);
-//        circularProgressBar.invalidate();
-//
-//        Log.d(TAG, "Remaining Time: " + TIMER_DURATION);
-//    }
