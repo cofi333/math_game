@@ -32,20 +32,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.569" />
 
-    <Button
-        android:id="@+id/soundOff_button"
-        android:layout_width="208dp"
-        android:layout_height="56dp"
-        android:backgroundTint="#100958"
-        android:fontFamily="@font/irish"
-        android:text="Sound Off"
-        android:textSize="29sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.817" />
 
     <Button
         android:id="@+id/closeButton"
@@ -67,7 +53,7 @@
         android:layout_width="342dp"
         android:layout_height="166dp"
         android:fontFamily="@font/irish"
-        android:text="@string/pause_menu"
+        android:text="Game over"
         android:textAlignment="center"
         android:textColor="#100958"
         android:textSize="80sp"
@@ -78,19 +64,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.058" />
 
-    <Button
-        android:id="@+id/soundOn_button"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
-        android:backgroundTint="#100958"
-        android:fontFamily="@font/irish"
-        android:text="Sound on"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.698" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

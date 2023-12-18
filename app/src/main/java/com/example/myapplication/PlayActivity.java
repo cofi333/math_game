@@ -36,6 +36,7 @@ public class PlayActivity extends AppCompatActivity {
 
     private static long TIMER_DURATION = 30000; // 30 seconds
     private int whatTask=1;
+    private int whatLevel=1;
     private CountDownTimer countDownTimer;
 
     TextView scoreTextView;
@@ -66,9 +67,31 @@ public class PlayActivity extends AppCompatActivity {
     public Button b9;
     public Button bDel;
 
-    public void showPopupWindow() {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.popup_layout, null);
+    public void showPopupWindow(int whatTask) {
+
+        LayoutInflater inflater ;
+        View popupView;
+        if(whatTask==5)
+        {
+
+            inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            popupView = inflater.inflate(R.layout.popup_level_complete, null);
+
+
+        }
+        else if(whatTask==99)
+        {
+
+            inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            popupView = inflater.inflate(R.layout.game_over, null);
+
+
+        }
+        else {
+            inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            popupView = inflater.inflate(R.layout.popup_layout, null);
+        }
+
 
         // Access views in the popup layout
 //        TextView popupTextView = popupView.findViewById(R.id.popupTextView);
@@ -102,13 +125,7 @@ public class PlayActivity extends AppCompatActivity {
         rootView.addView(backgroundView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // Dismiss the popup window and remove the background when clicked outside of it
-        backgroundView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-                rootView.removeView(backgroundView);
-            }
-        });
+
         // Set up the close button or other interactions
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,7 +213,7 @@ public class PlayActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                startActivity(new Intent(PlayActivity.this, PauseActivity.class));
                 countDownTimer.cancel();
-                showPopupWindow();
+                showPopupWindow(whatTask);
             }
         });
 
@@ -239,7 +256,7 @@ public class PlayActivity extends AppCompatActivity {
                         taskBefore2.setText(task2);
                         taskBefore.setText(task1);
                         //neki if (if i=1 pokreni task 1 ako je 2 onda pokreni task 2
-                        if(whatTask<2)
+                        if(whatTask<5)
                         {
                             generateTaskLevel1();
                             whatTask+=1;
@@ -248,7 +265,8 @@ public class PlayActivity extends AppCompatActivity {
                         else {
 
                             countDownTimer.cancel();
-                            showPopupWindow();
+                            showPopupWindow(whatTask);
+                            whatTask=0;
                         }
 
 
@@ -285,7 +303,15 @@ public class PlayActivity extends AppCompatActivity {
         Random random = new Random();
         int operand1 = random.nextInt(9) + 1;
         int operand2 = random.nextInt(9) + 1;
-        correctAnswer = operand1 + operand2;
+        if(whatLevel==1)
+        {
+
+            correctAnswer = operand1 + operand2;
+        }
+        else if(whatLevel==2)
+        {
+            correctAnswer = operand1 - operand2;
+        }
         lengthOfCorrectAnswer = String.valueOf(correctAnswer).length();
 
 
@@ -330,7 +356,7 @@ public class PlayActivity extends AppCompatActivity {
             public void onFinish() {
                 // Timer finished, perform actions here
                 Toast.makeText(PlayActivity.this, "Timer finished!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(PlayActivity.this, PauseActivity.class));
+               showPopupWindow(99);
             }
         };
 
