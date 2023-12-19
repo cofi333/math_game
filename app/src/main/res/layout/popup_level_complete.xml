@@ -42,13 +42,13 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="342dp"
-        android:layout_height="166dp"
+        android:layout_width="307dp"
+        android:layout_height="138dp"
         android:fontFamily="@font/irish"
         android:text="Level completed"
         android:textAlignment="center"
         android:textColor="#fff"
-        android:textSize="60sp"
+        android:textSize="55sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

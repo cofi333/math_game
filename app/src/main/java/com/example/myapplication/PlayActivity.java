@@ -43,6 +43,7 @@ public class PlayActivity extends AppCompatActivity {
     TextView taskBefore;
     TextView taskBefore2;
     TextView subtractionExerciseTextView;
+    TextView showLevel;
     private PopupWindow popupWindow;
     private Button closeButton;
     private View popupView;
@@ -96,6 +97,7 @@ public class PlayActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
+
                     Intent intent = new Intent(PlayActivity.this, MainActivity.class);
 
                     // Add any extra data to the intent if needed
@@ -114,6 +116,7 @@ public class PlayActivity extends AppCompatActivity {
                     taskBefore.setText("");
                     taskBefore2.setText("");
                     whatLevel++;
+                    showLevel.setText("Level: \n" + whatLevel + "/5");
                     generateTaskLevel1(whatLevel);
                     popupWindow.dismiss();
                     backgroundView.setAlpha(0f);
@@ -142,6 +145,7 @@ public class PlayActivity extends AppCompatActivity {
                     generateTaskLevel1(whatLevel);
                     score = 0;
                     scoreTextView.setText("Score: " + score);
+                    showLevel.setText("Level: \n" + whatLevel + "/5");
 
                     if (popupWindow != null && popupWindow.isShowing()) {
                         popupWindow.dismiss();
@@ -270,6 +274,7 @@ public class PlayActivity extends AppCompatActivity {
         subtractionExerciseTextView = findViewById(R.id.subtractionExerciseTextView);
         pauseButton = findViewById(R.id.pauseImageView);
         circularProgressBar = findViewById(R.id.circularProgressBar);
+        showLevel = findViewById(R.id.showLevel);
 
         generateTaskLevel1(whatLevel);
         startTimer();
