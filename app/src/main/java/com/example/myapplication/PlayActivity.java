@@ -111,6 +111,8 @@ public class PlayActivity extends AppCompatActivity {
             nextLevelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    taskBefore.setText("");
+                    taskBefore2.setText("");
                     whatLevel++;
                     generateTaskLevel1(whatLevel);
                     popupWindow.dismiss();
