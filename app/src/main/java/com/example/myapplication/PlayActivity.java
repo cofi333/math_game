@@ -196,17 +196,24 @@ public class PlayActivity extends AppCompatActivity {
     }
     private void restartTimer() {
         Log.d(TAG, "restartTimer called");
-        TIMER_DURATION = Math.max(TIMER_DURATION, 0);
+
+        // Reset TIMER_DURATION to the initial value (e.g., 30 seconds)
+        TIMER_DURATION = 30000;
+
+        // Calculate initial progress based on the reset TIMER_DURATION
         initialProgress = (int) ((TIMER_DURATION / 1000) * oneStepForOneSecond);
 
         Log.d(TAG, "Progress: " + initialProgress);
 
+        // Cancel the existing timer, if any
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
 
+        // Start the timer again
         startTimer();
     }
+
 
 
 
