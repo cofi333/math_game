@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -36,7 +37,6 @@ public class PlayActivity extends AppCompatActivity {
 
     private static long TIMER_DURATION = 30000; // 30 seconds
     private int whatTask=1;
-    private int whatLevel=1;
     private CountDownTimer countDownTimer;
 
     TextView scoreTextView;
@@ -50,6 +50,7 @@ public class PlayActivity extends AppCompatActivity {
 
     ImageView pauseButton;
     int correctAnswer;
+    int whatLevel = 1;
     int lengthOfCorrectAnswer;
     int lengthOfUserAnswer;
     int score;
@@ -67,9 +68,18 @@ public class PlayActivity extends AppCompatActivity {
     public Button b9;
     public Button bDel;
 
+    @SuppressLint("InflateParams")
     public void showPopupWindow(int whatTask) {
 
-        LayoutInflater inflater ;
+        View backgroundView = new View(PlayActivity.this);
+        backgroundView.setBackgroundColor(ContextCompat.getColor(PlayActivity.this, android.R.color.black));
+        backgroundView.setAlpha(0.5f);
+
+        // Add the background view to the root layout
+        ViewGroup rootView = findViewById(android.R.id.content);
+        rootView.addView(backgroundView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        LayoutInflater inflater;
         View popupView;
         if(whatTask==5)
         {
@@ -77,13 +87,45 @@ public class PlayActivity extends AppCompatActivity {
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupView = inflater.inflate(R.layout.popup_level_complete, null);
 
+            TextView scoreTextView = popupView.findViewById(R.id.currentScoreLevelCompleted);
+            scoreTextView.setText("Current score: \n" + score);
+            Button nextLevelBtn = popupView.findViewById(R.id.nextLevelBtn);
+            Button exitGameBtn = popupView.findViewById(R.id.exitGameBtn);
 
+            exitGameBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(PlayActivity.this, MainActivity.class);
+
+                    // Add any extra data to the intent if needed
+
+                    // Start the main activity
+                    startActivity(intent);
+
+                    // Finish the current activity (optional, depends on your use case)
+                    finish();
+
+                }
+            });
+            nextLevelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    whatLevel++;
+                    generateTaskLevel1(whatLevel);
+                    popupWindow.dismiss();
+                    backgroundView.setAlpha(0f);
+                    restartTimer();
+                }
+            });
         }
         else if(whatTask==99)
         {
 
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupView = inflater.inflate(R.layout.game_over, null);
+            TextView finalScore = popupView.findViewById(R.id.finalScoreTxtView);
+            finalScore.setText("Your score:\n" + score);
 
 
         }
@@ -93,9 +135,7 @@ public class PlayActivity extends AppCompatActivity {
         }
 
 
-        // Access views in the popup layout
-//        TextView popupTextView = popupView.findViewById(R.id.popupTextView);
-        Button closeButton = popupView.findViewById(R.id.closeButton);
+
 
 
         // Create the PopupWindow
@@ -116,13 +156,7 @@ public class PlayActivity extends AppCompatActivity {
         popupWindow.setWidth(popupWidthInPixels);
         popupWindow.setHeight(popupHeightInPixels);
 
-        View backgroundView = new View(PlayActivity.this);
-        backgroundView.setBackgroundColor(ContextCompat.getColor(PlayActivity.this, android.R.color.black));
-        backgroundView.setAlpha(0.5f);
 
-        // Add the background view to the root layout
-        ViewGroup rootView = findViewById(android.R.id.content);
-        rootView.addView(backgroundView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // Dismiss the popup window and remove the background when clicked outside of it
 
@@ -203,7 +237,7 @@ public class PlayActivity extends AppCompatActivity {
         pauseButton = findViewById(R.id.pauseImageView);
         circularProgressBar = findViewById(R.id.circularProgressBar);
 
-        generateTaskLevel1();
+        generateTaskLevel1(whatLevel);
         startTimer();
 
 
@@ -258,7 +292,7 @@ public class PlayActivity extends AppCompatActivity {
                         //neki if (if i=1 pokreni task 1 ako je 2 onda pokreni task 2
                         if(whatTask<5)
                         {
-                            generateTaskLevel1();
+                            generateTaskLevel1(whatLevel);
                             whatTask+=1;
 
                         }
@@ -299,25 +333,29 @@ public class PlayActivity extends AppCompatActivity {
 
     }
 
-    private void generateTaskLevel1() {
+    private void generateTaskLevel1(int level) {
         Random random = new Random();
-        int operand1 = random.nextInt(9) + 1;
-        int operand2 = random.nextInt(9) + 1;
-        if(whatLevel==1)
-        {
 
-            correctAnswer = operand1 + operand2;
-        }
-        else if(whatLevel==2)
+        if(level==1)
         {
+            int operand1 = random.nextInt(9) + 1;
+            int operand2 = random.nextInt(9) + 1;
+            correctAnswer = operand1 + operand2;
+            subtractionExerciseTextView.setText(operand1 + " + " + operand2 + "");
+        }
+        else if(level==2)
+        {
+            int operand1 = random.nextInt(9) + 1;
+            int operand2 = random.nextInt(operand1) + 1;
             correctAnswer = operand1 - operand2;
+            subtractionExerciseTextView.setText(operand1 + " - " + operand2 + "");
         }
         lengthOfCorrectAnswer = String.valueOf(correctAnswer).length();
 
 
 
         TextView userAnswerEditText = findViewById(R.id.userInput);
-        subtractionExerciseTextView.setText(operand1 + " + " + operand2 + "");
+
 
         userAnswerEditText.setText("");
     }
