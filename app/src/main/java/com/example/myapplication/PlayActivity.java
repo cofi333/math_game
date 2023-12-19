@@ -36,7 +36,6 @@ public class PlayActivity extends AppCompatActivity {
     // Add this variable
 
     private static long TIMER_DURATION = 30000; // 30 seconds
-    private int whatTask=1;
     private CountDownTimer countDownTimer;
 
     TextView scoreTextView;
@@ -51,6 +50,7 @@ public class PlayActivity extends AppCompatActivity {
     ImageView pauseButton;
     int correctAnswer;
     int whatLevel = 1;
+    int whatTask = 1;
     int lengthOfCorrectAnswer;
     int lengthOfUserAnswer;
     int score;
@@ -69,7 +69,7 @@ public class PlayActivity extends AppCompatActivity {
     public Button bDel;
 
     @SuppressLint("InflateParams")
-    public void showPopupWindow(int whatTask) {
+    public void showPopupWindow(int whatTask2) {
 
         View backgroundView = new View(PlayActivity.this);
         backgroundView.setBackgroundColor(ContextCompat.getColor(PlayActivity.this, android.R.color.black));
@@ -81,7 +81,7 @@ public class PlayActivity extends AppCompatActivity {
 
         LayoutInflater inflater;
         View popupView;
-        if(whatTask==5)
+        if(whatTask2==5)
         {
 
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -119,13 +119,38 @@ public class PlayActivity extends AppCompatActivity {
                 }
             });
         }
-        else if(whatTask==99)
+        else if(whatTask2==99)
         {
 
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupView = inflater.inflate(R.layout.game_over, null);
             TextView finalScore = popupView.findViewById(R.id.finalScoreTxtView);
             finalScore.setText("Your score:\n" + score);
+            Button tryAgainBtn = popupView.findViewById(R.id.tryAgainBtn);
+            whatTask = 1;
+            taskBefore.setText("");
+            taskBefore2.setText("");
+            tryAgainBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "tryAgainBtn onClick");
+
+                    whatLevel = 1;
+                    whatTask = 1;
+                    generateTaskLevel1(whatLevel);
+                    score = 0;
+                    scoreTextView.setText("Score: " + score);
+
+                    if (popupWindow != null && popupWindow.isShowing()) {
+                        popupWindow.dismiss();
+                    }
+
+
+                    backgroundView.setAlpha(0f);
+                    restartTimer();
+                }
+            });
+
 
 
         }
