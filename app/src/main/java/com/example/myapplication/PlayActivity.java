@@ -129,7 +129,6 @@ public class PlayActivity extends AppCompatActivity {
         }
         else if(whatTask2==10)
         {
-
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupView = inflater.inflate(R.layout.game_over, null);
             TextView finalScore = popupView.findViewById(R.id.finalScoreTxtView);
@@ -410,8 +409,10 @@ public class PlayActivity extends AppCompatActivity {
                             whatTask+=1;
 
                         }
+                        else if(whatLevel == 5) {
+                            showPopupWindow(10);
+                        }
                         else {
-
                             countDownTimer.cancel();
                             showPopupWindow(whatTask);
                             whatTask=1;
