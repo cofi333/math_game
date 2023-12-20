@@ -19,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
     public Button playButton;
     public Button helpButton;
     public Button highScoresButton;
+
+    //TODO replace this with actual higcore activity
+    public Button EHBtn;
     private String TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         playButton = findViewById(R.id.play_button);
         helpButton = findViewById(R.id.help_button);
         highScoresButton = findViewById(R.id.high_scores_button);
+        EHBtn = findViewById(R.id.enter_high_score); //To be removed -- TESTING ONLY
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +46,16 @@ public class MainActivity extends AppCompatActivity {
                 new GetScores().execute();
             }
         });
+
+        //To be removed -- TESTING ONLY
+        EHBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, DummyActivity.class);
+                startActivity(intent);
+            }
+        });
+        //To be removed -- TESTING ONLY
     }
 
     private class  GetScores extends AsyncTask<Void, Void, Void>{
