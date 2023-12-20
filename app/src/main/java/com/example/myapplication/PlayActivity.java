@@ -49,7 +49,7 @@ public class PlayActivity extends AppCompatActivity {
     private PopupWindow popupWindow;
     private Button closeButton;
     private View popupView;
-
+    int currentLevelScore;
     ImageView pauseButton;
     int correctAnswer;
     int whatLevel = 1;
@@ -118,6 +118,7 @@ public class PlayActivity extends AppCompatActivity {
                     taskBefore.setText("");
                     taskBefore2.setText("");
                     whatLevel++;
+                    currentLevelScore = 0;
                     showLevel.setText("Level: \n" + whatLevel + "/5");
                     generateTaskLevel1(whatLevel);
                     popupWindow.dismiss();
@@ -173,6 +174,8 @@ public class PlayActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (popupWindow != null && popupWindow.isShowing()) {
+                        score = score - (currentLevelScore * 50);
+                        scoreTextView.setText("Score: " + score);
                         popupWindow.dismiss();
                         backgroundView.setAlpha(0f);
                         whatTask = 1;
@@ -384,6 +387,7 @@ public class PlayActivity extends AppCompatActivity {
 
                         if (checkAnswer(correctAnswer, Integer.parseInt(userAnswerText))) {
                             score+=50;
+                            currentLevelScore++;
                             scoreTextView.setText("Score: " + score);
                             taskBefore2.setTextColor(taskBefore.getCurrentTextColor());
                             taskBefore.setTextColor(Color.parseColor("#00FF00"));
