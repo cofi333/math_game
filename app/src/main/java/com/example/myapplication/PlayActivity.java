@@ -124,7 +124,7 @@ public class PlayActivity extends AppCompatActivity {
                 }
             });
         }
-        else if(whatTask2==99)
+        else if(whatTask2==10)
         {
 
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -159,6 +159,26 @@ public class PlayActivity extends AppCompatActivity {
 
 
 
+        }
+
+        else if (whatTask2 == 99) {
+            inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            popupView = inflater.inflate(R.layout.popup_level_failed, null);
+            Button restartLevelBtn = popupView.findViewById(R.id.restartLevelBtn);
+            Button endGameBtn = popupView.findViewById(R.id.endGameBtn);
+
+            restartLevelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (popupWindow != null && popupWindow.isShowing()) {
+                        popupWindow.dismiss();
+                        backgroundView.setAlpha(0f);
+                        whatTask = 1;
+                        taskBefore.setText("");
+                        taskBefore2.setText("");
+                    }
+                }
+            });
         }
         else {
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -320,7 +340,7 @@ public class PlayActivity extends AppCompatActivity {
                         } else {
                             taskBefore2.setTextColor(taskBefore.getCurrentTextColor());
                             taskBefore.setTextColor(Color.parseColor("#FF0000"));
-                            decrementTimer(5000);
+                            decrementTimer(2000);
 
 
                         }
@@ -377,18 +397,112 @@ public class PlayActivity extends AppCompatActivity {
 
         if(level==1)
         {
-            int operand1 = random.nextInt(9) + 1;
-            int operand2 = random.nextInt(9) + 1;
-            correctAnswer = operand1 + operand2;
-            subtractionExerciseTextView.setText(operand1 + " + " + operand2 + "");
-        }
-        else if(level==2)
-        {
+            String[] operations = {"+", "-"};
+            String selectedOperation = operations[random.nextInt(operations.length)];
+
             int operand1 = random.nextInt(9) + 1;
             int operand2 = random.nextInt(operand1) + 1;
-            correctAnswer = operand1 - operand2;
-            subtractionExerciseTextView.setText(operand1 + " - " + operand2 + "");
+
+            if (selectedOperation.equals("+")) {
+
+                correctAnswer = operand1 + operand2;
+                subtractionExerciseTextView.setText(operand1 + " + " + operand2 + "");
+            } else {
+
+                correctAnswer = operand1 - operand2;
+                subtractionExerciseTextView.setText(operand1 + " - " + operand2 + "");
+
+            }
+
         }
+        else if (level == 2) {
+            String[] operations = {"*", "/"};
+            String selectedOperation = operations[random.nextInt(operations.length)];
+            int operand1 = random.nextInt(11) + 10;
+            int operand2 = random.nextInt(operand1 - 9) + 10;
+
+            // Ensure operand1 is divisible by operand2 when using division operation
+            if (selectedOperation.equals("/")) {
+                operand1 = operand2 * (random.nextInt(11) + 1); // Choose a random factor for operand1
+            }
+
+            if (selectedOperation.equals("*")) {
+                correctAnswer = operand1 * operand2;
+                subtractionExerciseTextView.setText(operand1 + " * " + operand2 + "");
+            } else {
+                correctAnswer = operand1 / operand2;
+                subtractionExerciseTextView.setText(operand1 + " / " + operand2 + "");
+            }
+        }
+        else if (level == 3) {
+            String[] operations = {"+","-","*", "/"};
+            String selectedOperation = operations[random.nextInt(operations.length)];
+
+            int operand1 = random.nextInt(11) + 10;
+            int operand2 = random.nextInt(operand1 - 9) + 10;
+
+
+            if (selectedOperation.equals("+")) {
+                correctAnswer = operand1 + operand2;
+                subtractionExerciseTextView.setText(operand1 + " + " + operand2 + "");
+            }
+
+            if (selectedOperation.equals("-")) {
+                correctAnswer = operand1 - operand2;
+                subtractionExerciseTextView.setText(operand1 + " - " + operand2 + "");
+            }
+
+            if (selectedOperation.equals("*")) {
+                correctAnswer = operand1 * operand2;
+                subtractionExerciseTextView.setText(operand1 + " * " + operand2 + "");
+            }
+
+            if(selectedOperation.equals("/")){
+                operand1 = operand2 * (random.nextInt(11) + 1); // Choose a random factor for operand1
+                correctAnswer = operand1 / operand2;
+                subtractionExerciseTextView.setText(operand1 + " / " + operand2 + "");
+            }
+
+
+
+        }
+
+        else if (level == 4) {
+            int operand1 = random.nextInt(900) + 100; // Generates a random three-digit number
+            int operand2 = random.nextInt(operand1) + 100;
+            String[] operations = {"+", "-"};
+            String selectedOperation = operations[random.nextInt(operations.length)];
+
+            if (selectedOperation.equals("+")) {
+                correctAnswer = operand1 + operand2;
+                subtractionExerciseTextView.setText(operand1 + " + " + operand2);
+            }
+
+            if (selectedOperation.equals("-")) {
+                correctAnswer = operand1 - operand2;
+                subtractionExerciseTextView.setText(operand1 + " - " + operand2);
+            }
+        }
+
+        else if (level == 5) {
+            String[] operations = {"*", "/"};
+            String selectedOperation = operations[random.nextInt(operations.length)];
+            int operand1 = random.nextInt(10) + 100;
+            int operand2 = random.nextInt(operand1 - 9) + 100;
+
+            if (selectedOperation.equals("/")) {
+                operand1 = operand2 * (random.nextInt(11) + 1); // Choose a random factor for operand1
+            }
+
+            if (selectedOperation.equals("*")) {
+                correctAnswer = operand1 * operand2;
+                subtractionExerciseTextView.setText(operand1 + " * " + operand2 + "");
+            } else {
+                correctAnswer = operand1 / operand2;
+                subtractionExerciseTextView.setText(operand1 + " / " + operand2 + "");
+            }
+        }
+
         lengthOfCorrectAnswer = String.valueOf(correctAnswer).length();
 
 
