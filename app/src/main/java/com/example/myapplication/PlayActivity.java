@@ -120,11 +120,11 @@ public class PlayActivity extends AppCompatActivity {
                     generateTaskLevel1(whatLevel);
                     popupWindow.dismiss();
                     backgroundView.setAlpha(0f);
-                    restartTimer();
+                    restartTimer(whatTask2);
                 }
             });
         }
-        else if(whatTask2==99)
+        else if(whatTask2==10)
         {
 
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -153,16 +153,38 @@ public class PlayActivity extends AppCompatActivity {
 
 
                     backgroundView.setAlpha(0f);
-                    restartTimer();
+                    restartTimer(whatTask2);
                 }
             });
 
 
 
         }
+
+        else if (whatTask2 == 99) {
+            inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            popupView = inflater.inflate(R.layout.popup_level_failed, null);
+            Button restartLevelBtn = popupView.findViewById(R.id.restartLevelBtn);
+            Button endGameBtn = popupView.findViewById(R.id.endGameBtn);
+
+            restartLevelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (popupWindow != null && popupWindow.isShowing()) {
+                        popupWindow.dismiss();
+                        backgroundView.setAlpha(0f);
+                        whatTask = 1;
+                        taskBefore.setText("");
+                        taskBefore2.setText("");
+                    }
+                }
+            });
+        }
         else {
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupView = inflater.inflate(R.layout.popup_layout, null);
+            closeButton = popupView.findViewById(R.id.closeButton);
+
         }
 
 
@@ -213,7 +235,7 @@ public class PlayActivity extends AppCompatActivity {
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                restartTimer();
+                restartTimer(whatTask2);
             }
         });
     }
@@ -225,24 +247,43 @@ public class PlayActivity extends AppCompatActivity {
         popupWindow.dismiss();
 
     }
-    private void restartTimer() {
-        Log.d(TAG, "restartTimer called");
+    private void restartTimer(int whatTask2) {
+        if(whatTask2!=5 && whatTask2!=99)
+        {
+            Log.d(TAG, "restartTimer called");
+            TIMER_DURATION = Math.max(TIMER_DURATION, 0);
+            initialProgress = (int) ((TIMER_DURATION / 1000) * oneStepForOneSecond);
 
-        // Reset TIMER_DURATION to the initial value (e.g., 30 seconds)
-        TIMER_DURATION = 30000;
+            Log.d(TAG, "what task2: " + whatTask2);
 
-        // Calculate initial progress based on the reset TIMER_DURATION
-        initialProgress = (int) ((TIMER_DURATION / 1000) * oneStepForOneSecond);
 
-        Log.d(TAG, "Progress: " + initialProgress);
+            if (countDownTimer != null) {
+                countDownTimer.cancel();
+            }
 
-        // Cancel the existing timer, if any
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
+            startTimer();
+        }
+        else
+        {
+            Log.d(TAG, "restartTimer called");
+
+            // Reset TIMER_DURATION to the initial value (e.g., 30 seconds)
+            TIMER_DURATION = 30000;
+            Log.d(TAG, "what task2: " + whatTask2);
+            // Calculate initial progress based on the reset TIMER_DURATION
+            initialProgress = (int) ((TIMER_DURATION / 1000) * oneStepForOneSecond);
+
+            Log.d(TAG, "Progress: " + initialProgress);
+
+            // Cancel the existing timer, if any
+            if (countDownTimer != null) {
+                countDownTimer.cancel();
+            }
+
+            // Start the timer again
+            startTimer();
         }
 
-        // Start the timer again
-        startTimer();
     }
 
 
@@ -286,7 +327,7 @@ public class PlayActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                startActivity(new Intent(PlayActivity.this, PauseActivity.class));
                 countDownTimer.cancel();
-                showPopupWindow(whatTask);
+                showPopupWindow(0);
             }
         });
 
@@ -320,7 +361,7 @@ public class PlayActivity extends AppCompatActivity {
                         } else {
                             taskBefore2.setTextColor(taskBefore.getCurrentTextColor());
                             taskBefore.setTextColor(Color.parseColor("#FF0000"));
-                            decrementTimer(5000);
+                            decrementTimer(2000);
 
 
                         }
@@ -339,7 +380,7 @@ public class PlayActivity extends AppCompatActivity {
 
                             countDownTimer.cancel();
                             showPopupWindow(whatTask);
-                            whatTask=0;
+                            whatTask=1;
                         }
 
 
@@ -377,18 +418,112 @@ public class PlayActivity extends AppCompatActivity {
 
         if(level==1)
         {
-            int operand1 = random.nextInt(9) + 1;
-            int operand2 = random.nextInt(9) + 1;
-            correctAnswer = operand1 + operand2;
-            subtractionExerciseTextView.setText(operand1 + " + " + operand2 + "");
-        }
-        else if(level==2)
-        {
+            String[] operations = {"+", "-"};
+            String selectedOperation = operations[random.nextInt(operations.length)];
+
             int operand1 = random.nextInt(9) + 1;
             int operand2 = random.nextInt(operand1) + 1;
-            correctAnswer = operand1 - operand2;
-            subtractionExerciseTextView.setText(operand1 + " - " + operand2 + "");
+
+            if (selectedOperation.equals("+")) {
+
+                correctAnswer = operand1 + operand2;
+                subtractionExerciseTextView.setText(operand1 + " + " + operand2 + "");
+            } else {
+
+                correctAnswer = operand1 - operand2;
+                subtractionExerciseTextView.setText(operand1 + " - " + operand2 + "");
+
+            }
+
         }
+        else if (level == 2) {
+            String[] operations = {"*", "/"};
+            String selectedOperation = operations[random.nextInt(operations.length)];
+            int operand1 = random.nextInt(11) + 10;
+            int operand2 = random.nextInt(operand1 - 9) + 10;
+
+            // Ensure operand1 is divisible by operand2 when using division operation
+            if (selectedOperation.equals("/")) {
+                operand1 = operand2 * (random.nextInt(11) + 1); // Choose a random factor for operand1
+            }
+
+            if (selectedOperation.equals("*")) {
+                correctAnswer = operand1 * operand2;
+                subtractionExerciseTextView.setText(operand1 + " * " + operand2 + "");
+            } else {
+                correctAnswer = operand1 / operand2;
+                subtractionExerciseTextView.setText(operand1 + " / " + operand2 + "");
+            }
+        }
+        else if (level == 3) {
+            String[] operations = {"+","-","*", "/"};
+            String selectedOperation = operations[random.nextInt(operations.length)];
+
+            int operand1 = random.nextInt(11) + 10;
+            int operand2 = random.nextInt(operand1 - 9) + 10;
+
+
+            if (selectedOperation.equals("+")) {
+                correctAnswer = operand1 + operand2;
+                subtractionExerciseTextView.setText(operand1 + " + " + operand2 + "");
+            }
+
+            if (selectedOperation.equals("-")) {
+                correctAnswer = operand1 - operand2;
+                subtractionExerciseTextView.setText(operand1 + " - " + operand2 + "");
+            }
+
+            if (selectedOperation.equals("*")) {
+                correctAnswer = operand1 * operand2;
+                subtractionExerciseTextView.setText(operand1 + " * " + operand2 + "");
+            }
+
+            if(selectedOperation.equals("/")){
+                operand1 = operand2 * (random.nextInt(11) + 1); // Choose a random factor for operand1
+                correctAnswer = operand1 / operand2;
+                subtractionExerciseTextView.setText(operand1 + " / " + operand2 + "");
+            }
+
+
+
+        }
+
+        else if (level == 4) {
+            int operand1 = random.nextInt(900) + 100; // Generates a random three-digit number
+            int operand2 = random.nextInt(operand1) + 100;
+            String[] operations = {"+", "-"};
+            String selectedOperation = operations[random.nextInt(operations.length)];
+
+            if (selectedOperation.equals("+")) {
+                correctAnswer = operand1 + operand2;
+                subtractionExerciseTextView.setText(operand1 + " + " + operand2);
+            }
+
+            if (selectedOperation.equals("-")) {
+                correctAnswer = operand1 - operand2;
+                subtractionExerciseTextView.setText(operand1 + " - " + operand2);
+            }
+        }
+
+        else if (level == 5) {
+            String[] operations = {"*", "/"};
+            String selectedOperation = operations[random.nextInt(operations.length)];
+            int operand1 = random.nextInt(10) + 100;
+            int operand2 = random.nextInt(operand1 - 9) + 100;
+
+            if (selectedOperation.equals("/")) {
+                operand1 = operand2 * (random.nextInt(11) + 1); // Choose a random factor for operand1
+            }
+
+            if (selectedOperation.equals("*")) {
+                correctAnswer = operand1 * operand2;
+                subtractionExerciseTextView.setText(operand1 + " * " + operand2 + "");
+            } else {
+                correctAnswer = operand1 / operand2;
+                subtractionExerciseTextView.setText(operand1 + " / " + operand2 + "");
+            }
+        }
+
         lengthOfCorrectAnswer = String.valueOf(correctAnswer).length();
 
 
