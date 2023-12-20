@@ -1,4 +1,9 @@
 <?php
+
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Credentials: true ");
+header('Access-Control-Allow-Methods: GET, POST');
+header("Access-Control-Allow-Headers: X-Requested-With");
 header("Content-type: application/json; charset=UTF-8");
 require_once 'config.php';
 require_once 'functions.php';
