@@ -4,15 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.os.AsyncTask;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /** @noinspection ALL*/
@@ -21,12 +19,12 @@ public class MainActivity extends AppCompatActivity {
     public Button playButton;
     public Button helpButton;
     public Button highScoresButton;
+    private String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         playButton = findViewById(R.id.play_button);
         helpButton = findViewById(R.id.help_button);
         highScoresButton = findViewById(R.id.high_scores_button);
@@ -41,72 +39,33 @@ public class MainActivity extends AppCompatActivity {
         highScoresButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new GetUsers().execute();
+                new GetScores().execute();
             }
         });
     }
 
-    public class GetUsers extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                // Your API endpoint URL
-                String apiUrl = "http://10.0.2.2:80/math_game/api/scores/";
-
-                // Create a URL object
-                URL url = new URL(apiUrl);
-
-                // Open a connection
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-                // Set request method to GET
-                urlConnection.setRequestMethod("GET");
-
-                // Get the response code
-                int responseCode = urlConnection.getResponseCode();
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    // Read the response from the input stream
-                    InputStream inputStream = urlConnection.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
-                    }
-
-                    // Close the streams
-                    reader.close();
-                    inputStream.close();
-
-                    // Return the JSON response
-                    return response.toString();
-                } else {
-                    // Handle error cases here
-                    return "Error: " + responseCode;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "Error: " + e.getMessage();
-            }
+    private class  GetScores extends AsyncTask<Void, Void, Void>{
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //Toast.makeText(MainActivity.this, "JSON podaci se downloaduju", Toast.LENGTH_LONG).show();
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected Void doInBackground(Void... voids) {
+            com.example.myapplication.HttpHandler sh = new com.example.myapplication.HttpHandler();
+            String url="https://mathgameapi.000webhostapp.com/api/scores/";
+            String jsonStr = sh.makeServiceCall(url);
             Intent intent = new Intent(MainActivity.this, ScoreActivity.class);
-            intent.putExtra("apiResponse", result);
+            intent.putExtra("jsonResponse", jsonStr);
             startActivity(intent);
+            return null;
         }
     }
-
 
     private void openActivity() {
         Intent intent = new Intent(MainActivity.this, PlayActivity.class);
         startActivity(intent);
     }
-
-
 }
 
 
