@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -37,6 +38,7 @@ public class PlayActivity extends AppCompatActivity {
 
     private static long TIMER_DURATION = 30000; // 30 seconds
     private CountDownTimer countDownTimer;
+    MediaPlayer mp;
 
     TextView scoreTextView;
     TextView userAnswerEditText;
@@ -184,6 +186,33 @@ public class PlayActivity extends AppCompatActivity {
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupView = inflater.inflate(R.layout.popup_layout, null);
             closeButton = popupView.findViewById(R.id.closeButton);
+            Button soundOnButton = popupView.findViewById(R.id.soundOn_button);
+            Button soundOffButton = popupView.findViewById(R.id.soundOff_button);
+
+            soundOnButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mp.isPlaying()) {
+                        Toast.makeText(PlayActivity.this,"The sound is already on.", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        mp.start();
+                    }
+                }
+            });
+
+            soundOffButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!mp.isPlaying()) {
+                        Toast.makeText(PlayActivity.this,"The sound is already off.", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        mp.pause();
+                    }
+                }
+            });
+
 
         }
 
@@ -293,7 +322,6 @@ public class PlayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
-
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         popupView = inflater.inflate(R.layout.popup_layout, null);
 
@@ -316,7 +344,9 @@ public class PlayActivity extends AppCompatActivity {
         pauseButton = findViewById(R.id.pauseImageView);
         circularProgressBar = findViewById(R.id.circularProgressBar);
         showLevel = findViewById(R.id.showLevel);
-
+        mp = MediaPlayer.create(this, R.raw.game_music);
+        mp.start();
+        mp.setLooping(true);
         generateTaskLevel1(whatLevel);
         startTimer();
 
