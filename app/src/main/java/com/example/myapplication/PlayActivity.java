@@ -120,7 +120,7 @@ public class PlayActivity extends AppCompatActivity {
                     generateTaskLevel1(whatLevel);
                     popupWindow.dismiss();
                     backgroundView.setAlpha(0f);
-                    restartTimer();
+                    restartTimer(whatTask2);
                 }
             });
         }
@@ -153,7 +153,7 @@ public class PlayActivity extends AppCompatActivity {
 
 
                     backgroundView.setAlpha(0f);
-                    restartTimer();
+                    restartTimer(whatTask2);
                 }
             });
 
@@ -163,6 +163,8 @@ public class PlayActivity extends AppCompatActivity {
         else {
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupView = inflater.inflate(R.layout.popup_layout, null);
+            closeButton = popupView.findViewById(R.id.closeButton);
+
         }
 
 
@@ -213,7 +215,7 @@ public class PlayActivity extends AppCompatActivity {
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                restartTimer();
+                restartTimer(whatTask2);
             }
         });
     }
@@ -225,24 +227,43 @@ public class PlayActivity extends AppCompatActivity {
         popupWindow.dismiss();
 
     }
-    private void restartTimer() {
-        Log.d(TAG, "restartTimer called");
+    private void restartTimer(int whatTask2) {
+        if(whatTask2!=5 && whatTask2!=99)
+        {
+            Log.d(TAG, "restartTimer called");
+            TIMER_DURATION = Math.max(TIMER_DURATION, 0);
+            initialProgress = (int) ((TIMER_DURATION / 1000) * oneStepForOneSecond);
 
-        // Reset TIMER_DURATION to the initial value (e.g., 30 seconds)
-        TIMER_DURATION = 30000;
+            Log.d(TAG, "what task2: " + whatTask2);
 
-        // Calculate initial progress based on the reset TIMER_DURATION
-        initialProgress = (int) ((TIMER_DURATION / 1000) * oneStepForOneSecond);
 
-        Log.d(TAG, "Progress: " + initialProgress);
+            if (countDownTimer != null) {
+                countDownTimer.cancel();
+            }
 
-        // Cancel the existing timer, if any
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
+            startTimer();
+        }
+        else
+        {
+            Log.d(TAG, "restartTimer called");
+
+            // Reset TIMER_DURATION to the initial value (e.g., 30 seconds)
+            TIMER_DURATION = 30000;
+            Log.d(TAG, "what task2: " + whatTask2);
+            // Calculate initial progress based on the reset TIMER_DURATION
+            initialProgress = (int) ((TIMER_DURATION / 1000) * oneStepForOneSecond);
+
+            Log.d(TAG, "Progress: " + initialProgress);
+
+            // Cancel the existing timer, if any
+            if (countDownTimer != null) {
+                countDownTimer.cancel();
+            }
+
+            // Start the timer again
+            startTimer();
         }
 
-        // Start the timer again
-        startTimer();
     }
 
 
@@ -286,7 +307,7 @@ public class PlayActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                startActivity(new Intent(PlayActivity.this, PauseActivity.class));
                 countDownTimer.cancel();
-                showPopupWindow(whatTask);
+                showPopupWindow(0);
             }
         });
 
@@ -339,7 +360,7 @@ public class PlayActivity extends AppCompatActivity {
 
                             countDownTimer.cancel();
                             showPopupWindow(whatTask);
-                            whatTask=0;
+                            whatTask=1;
                         }
 
 
