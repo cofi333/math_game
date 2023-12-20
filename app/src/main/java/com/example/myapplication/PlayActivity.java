@@ -443,6 +443,18 @@ public class PlayActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Release MediaPlayer resources
+        if (mp != null) {
+            mp.stop();
+            mp.release();
+            mp = null;
+        }
+    }
+
     private void generateTaskLevel1(int level) {
         Random random = new Random();
 
