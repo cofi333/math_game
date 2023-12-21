@@ -52,7 +52,7 @@
         android:layout_width="342dp"
         android:layout_height="166dp"
         android:fontFamily="@font/irish"
-        android:text="Game over"
+        android:text="Game finished"
         android:textAlignment="center"
         android:textColor="#100958"
         android:textSize="72sp"

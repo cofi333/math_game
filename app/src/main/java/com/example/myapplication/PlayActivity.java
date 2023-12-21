@@ -48,6 +48,7 @@ public class PlayActivity extends AppCompatActivity {
     TextView showLevel;
     private PopupWindow popupWindow;
     private Button closeButton;
+    private Button menuButton;
     private View popupView;
     int currentLevelScore;
     ImageView pauseButton;
@@ -73,6 +74,14 @@ public class PlayActivity extends AppCompatActivity {
 
     @SuppressLint("InflateParams")
     public void showPopupWindow(int whatTask2) {
+
+        pauseButton.setClickable(false);
+        bDel.setClickable(false);
+        b9.setClickable(false);
+        b8.setClickable(false);
+        b0.setClickable(false);
+        b7.setClickable(false);
+
 
         View backgroundView = new View(PlayActivity.this);
         backgroundView.setBackgroundColor(ContextCompat.getColor(PlayActivity.this, android.R.color.black));
@@ -100,15 +109,7 @@ public class PlayActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
 
-                    Intent intent = new Intent(PlayActivity.this, MainActivity.class);
-
-                    // Add any extra data to the intent if needed
-
-                    // Start the main activity
-                    startActivity(intent);
-
-                    // Finish the current activity (optional, depends on your use case)
-                    finish();
+                    toMenu();
 
                 }
             });
@@ -155,7 +156,7 @@ public class PlayActivity extends AppCompatActivity {
 
 
                     backgroundView.setAlpha(0f);
-                    restartTimer(whatTask2);
+                    restartTimer(10);
                 }
             });
 
@@ -168,6 +169,15 @@ public class PlayActivity extends AppCompatActivity {
             popupView = inflater.inflate(R.layout.popup_level_failed, null);
             Button restartLevelBtn = popupView.findViewById(R.id.restartLevelBtn);
             Button endGameBtn = popupView.findViewById(R.id.endGameBtn);
+
+            endGameBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    toMenu();
+
+                }
+            });
 
             restartLevelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -188,8 +198,18 @@ public class PlayActivity extends AppCompatActivity {
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupView = inflater.inflate(R.layout.popup_layout, null);
             closeButton = popupView.findViewById(R.id.closeButton);
+
             Button soundOnButton = popupView.findViewById(R.id.soundOn_button);
             Button soundOffButton = popupView.findViewById(R.id.soundOff_button);
+            menuButton = popupView.findViewById(R.id.menuBtn);
+            menuButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    toMenu();
+
+                }
+            });
 
             soundOnButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -256,17 +276,23 @@ public class PlayActivity extends AppCompatActivity {
         // Show the pop-up window at a specific location
         popupWindow.showAtLocation(findViewById(R.id.activity_play_relay), Gravity.CENTER, 0, 0);
 
-        // Dismiss the pop-up window when clicked outside of it
-//        popupView.setOnTouchListener((v, event) -> {
-//            popupWindow.dismiss();
-//
-//            return true;
-//        });
+        popupView.setOnTouchListener((v, event) -> {
+
+
+            return true;
+        });
 
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 restartTimer(whatTask2);
+                pauseButton.setClickable(true);
+                bDel.setClickable(true);
+                b9.setClickable(true);
+                b8.setClickable(true);
+                b0.setClickable(true);
+                b7.setClickable(true);
+
             }
         });
     }
@@ -278,8 +304,26 @@ public class PlayActivity extends AppCompatActivity {
         popupWindow.dismiss();
 
     }
+
+    public void toMenu()
+    {
+        Intent intent = new Intent(PlayActivity.this, MainActivity.class);
+
+        startActivity(intent);
+
+        TIMER_DURATION = 30000;
+
+        // Calculate initial progress based on the reset TIMER_DURATION
+        initialProgress = (int) ((TIMER_DURATION / 1000) * oneStepForOneSecond);
+
+
+        // Cancel the existing timer, if any
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+    }
     private void restartTimer(int whatTask2) {
-        if(whatTask2!=5 && whatTask2!=99)
+        if(whatTask2!=5 && whatTask2!=99 && whatTask2!=10)
         {
             Log.d(TAG, "restartTimer called");
             TIMER_DURATION = Math.max(TIMER_DURATION, 0);
@@ -410,7 +454,11 @@ public class PlayActivity extends AppCompatActivity {
 
                         }
                         else if(whatLevel == 5) {
+//                            countDownTimer.cancel();
+
                             showPopupWindow(10);
+                            countDownTimer.cancel();
+
                         }
                         else {
                             countDownTimer.cancel();
