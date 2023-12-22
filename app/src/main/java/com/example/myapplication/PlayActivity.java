@@ -552,10 +552,11 @@ public class PlayActivity extends AppCompatActivity {
 
             // Ensure operand1 is divisible by operand2 when using division operation
             if (selectedOperation.equals("/")) {
-                // Choose a random factor for operand2
-                int factor = random.nextInt(9) + 1;
-                operand2 = operand2 * factor;
-                operand1 = operand2 * (random.nextInt(9) + 1); // Choose a random factor for operand1
+                while (operand1 % operand2 != 0) {
+                     operand1 = random.nextInt(90) + 10; // Two-digit number
+                     operand2 = random.nextInt(90) + 10;
+                }
+
             }
 
             if (selectedOperation.equals("*")) {
@@ -594,7 +595,10 @@ public class PlayActivity extends AppCompatActivity {
             }
 
             if(selectedOperation.equals("/")){
-                operand1 = operand2 * (random.nextInt(11) + 1); // Choose a random factor for operand1
+                while (operand1 % operand2 != 0) {
+                    operand1 = random.nextInt(90) + 10; // Two-digit number
+                    operand2 = random.nextInt(90) + 10;
+                }
                 correctAnswer = operand1 / operand2;
                 subtractionExerciseTextView.setText(operand1 + " / " + operand2 + "");
             }
@@ -605,7 +609,7 @@ public class PlayActivity extends AppCompatActivity {
 
         else if (level == 4) {
             int operand1 = random.nextInt(900) + 100; // Generates a random three-digit number
-            int operand2 = random.nextInt(operand1) + 100;
+            int operand2 = random.nextInt(operand1 - 100) + 100;
             String[] operations = {"+", "-"};
             String selectedOperation = operations[random.nextInt(operations.length)];
 
@@ -623,11 +627,14 @@ public class PlayActivity extends AppCompatActivity {
         else if (level == 5) {
             String[] operations = {"*", "/"};
             String selectedOperation = operations[random.nextInt(operations.length)];
-            int operand1 = random.nextInt(10) + 100;
-            int operand2 = random.nextInt(operand1 - 9) + 100;
+            int operand1 = random.nextInt(900) + 100;
+            int operand2 = random.nextInt(900) + 100;
 
             if (selectedOperation.equals("/")) {
-                operand1 = operand2 * (random.nextInt(11) + 1); // Choose a random factor for operand1
+                while (operand1 % operand2 != 0) {
+                    operand1 = random.nextInt(900) + 100;
+                    operand2 = random.nextInt(900) + 100;
+                }
             }
 
             if (selectedOperation.equals("*")) {
