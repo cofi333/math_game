@@ -307,6 +307,13 @@ public class PlayActivity extends AppCompatActivity {
 
     public void toMenu()
     {
+
+        if (mp != null) {
+            mp.stop();
+            mp.release();
+            mp = null;
+        }
+
         Intent intent = new Intent(PlayActivity.this, MainActivity.class);
 
         startActivity(intent);
@@ -390,9 +397,12 @@ public class PlayActivity extends AppCompatActivity {
         pauseButton = findViewById(R.id.pauseImageView);
         circularProgressBar = findViewById(R.id.circularProgressBar);
         showLevel = findViewById(R.id.showLevel);
-        mp = MediaPlayer.create(this, R.raw.game_music);
-        mp.start();
-        mp.setLooping(true);
+        if (mp == null) {
+            // If not, create a new instance
+            mp = MediaPlayer.create(this, R.raw.game_music);
+            mp.start();
+            mp.setLooping(true);
+        }
         generateTaskLevel1(whatLevel);
         startTimer();
 
