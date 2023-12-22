@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Irish Grover', sans-serif;
+    font-size: 22px;
+}
+
+.math-game-bg {
+    background-color: #100958;
+    opacity: 90%;
+}
