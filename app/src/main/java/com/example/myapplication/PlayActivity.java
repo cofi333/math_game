@@ -190,6 +190,7 @@ public class PlayActivity extends AppCompatActivity {
                         whatTask = 1;
                         taskBefore.setText("");
                         taskBefore2.setText("");
+                        currentLevelScore = 0;
                     }
                 }
             });
