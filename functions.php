@@ -5,7 +5,7 @@ $GLOBALS['pdo'] = connectDatabase($dsn, $pdoOptions);
 //getAllRecordsFromDB
 function getAllData(string $table): array|bool
 {
-    $sql = "SELECT * FROM $table";
+	$sql = "SELECT * FROM $table ORDER BY CAST(score AS SIGNED) DESC";
     $stmt = $GLOBALS['pdo']->prepare($sql);
     $stmt->execute();
 
