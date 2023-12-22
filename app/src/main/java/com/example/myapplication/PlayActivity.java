@@ -641,6 +641,7 @@ public class PlayActivity extends AppCompatActivity {
 
     private boolean checkAnswer(int correctAnswer, int userAnswer) {
         if(correctAnswer == userAnswer) {
+            addExtraSecondToTimer();
             return true;
         }
 
@@ -691,6 +692,17 @@ public class PlayActivity extends AppCompatActivity {
 
         Log.d(TAG, "Progress: " + initialProgress);
         countDownTimer.cancel();
+        startTimer();
+    }
+
+    private void addExtraSecondToTimer() {
+        // Cancel the existing timer
+        countDownTimer.cancel();
+
+        // Add 1 second to the timer duration
+        TIMER_DURATION += 1000;
+
+        // Start a new timer with the updated duration
         startTimer();
     }
 }
