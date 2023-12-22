@@ -12,3 +12,33 @@
     background-color: #100958;
     opacity: 90%;
 }
+
+table {
+    width: 100%;
+}
+
+thead, tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+tbody {
+    display: block;
+    overflow-y: auto;
+    table-layout: fixed;
+    max-height: 600px;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+
+tbody::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+}
+
+body{
+    background-image: url("../asset/background.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
