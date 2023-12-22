@@ -544,12 +544,17 @@ public class PlayActivity extends AppCompatActivity {
         else if (level == 2) {
             String[] operations = {"*", "/"};
             String selectedOperation = operations[random.nextInt(operations.length)];
-            int operand1 = random.nextInt(11) + 10;
-            int operand2 = random.nextInt(operand1 - 9) + 10;
+
+            // Generate two-digit operands
+            int operand1 = random.nextInt(90) + 10; // Two-digit number
+            int operand2 = random.nextInt(90) + 10; // Two-digit number
 
             // Ensure operand1 is divisible by operand2 when using division operation
             if (selectedOperation.equals("/")) {
-                operand1 = operand2 * (random.nextInt(11) + 1); // Choose a random factor for operand1
+                // Choose a random factor for operand2
+                int factor = random.nextInt(9) + 1;
+                operand2 = operand2 * factor;
+                operand1 = operand2 * (random.nextInt(9) + 1); // Choose a random factor for operand1
             }
 
             if (selectedOperation.equals("*")) {
@@ -560,6 +565,10 @@ public class PlayActivity extends AppCompatActivity {
                 subtractionExerciseTextView.setText(operand1 + " / " + operand2 + "");
             }
         }
+
+
+
+
         else if (level == 3) {
             String[] operations = {"+","-","*", "/"};
             String selectedOperation = operations[random.nextInt(operations.length)];
