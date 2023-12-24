@@ -16,6 +16,8 @@
         android:padding="10dp"
         android:textAlignment="center"
         android:textSize="15sp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.475"
