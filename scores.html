@@ -107,7 +107,8 @@
             );
           }
         },
-        error: function () {
+        error: function (apiResponse) {
+          console.log(apiResponse);
           tableBody.append(
             `<tr><td class="text-center" colspan="4">Something went wrong, please refresh the page</td></tr>`
           );
