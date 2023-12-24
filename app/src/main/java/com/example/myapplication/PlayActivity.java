@@ -109,7 +109,7 @@ public class PlayActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
 
-                    toMenu();
+                    showPopupWindow(101);
 
                 }
             });
@@ -135,6 +135,7 @@ public class PlayActivity extends AppCompatActivity {
             TextView finalScore = popupView.findViewById(R.id.finalScoreTxtView);
             finalScore.setText("Your score:\n" + score);
             Button tryAgainBtn = popupView.findViewById(R.id.tryAgainBtn);
+            Button submitScore = popupView.findViewById(R.id.submitScoreBtn);
             whatTask = 1;
             taskBefore.setText("");
             taskBefore2.setText("");
@@ -157,6 +158,13 @@ public class PlayActivity extends AppCompatActivity {
 
                     backgroundView.setAlpha(0f);
                     restartTimer(10);
+                }
+            });
+
+            submitScore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPopupWindow(101);
                 }
             });
 
@@ -194,6 +202,10 @@ public class PlayActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
+        else if(whatTask2 == 101) {
+            inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            popupView = inflater.inflate(R.layout.share_your_score, null);
         }
         else {
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
