@@ -116,13 +116,13 @@ public class PlayActivity extends AppCompatActivity {
             TextView scoreTextView = popupView.findViewById(R.id.currentScoreLevelCompleted);
             scoreTextView.setText("Current score: \n" + score);
             Button nextLevelBtn = popupView.findViewById(R.id.nextLevelBtn);
+            Button submitScoreBtn = popupView.findViewById(R.id.submitScoreBtn);
             Button exitGameBtn = popupView.findViewById(R.id.exitGameBtn);
-
-            exitGameBtn.setOnClickListener(new View.OnClickListener() {
+            submitScoreBtn.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    showPopupWindow(101);
+                    showAlertDialog();
                 }
             });
             nextLevelBtn.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +137,13 @@ public class PlayActivity extends AppCompatActivity {
                     popupWindow.dismiss();
                     backgroundView.setAlpha(0f);
                     restartTimer(whatTask2);
+                }
+            });
+
+            exitGameBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toMenu();
                 }
             });
         }
@@ -176,7 +183,7 @@ public class PlayActivity extends AppCompatActivity {
             submitScore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showPopupWindow(101);
+                    showAlertDialog();
                 }
             });
 
@@ -214,61 +221,6 @@ public class PlayActivity extends AppCompatActivity {
                     }
                 }
             });
-        }
-        else if(whatTask2 == 101) {
-            inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            popupView = inflater.inflate(R.layout.share_your_score, null);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(PlayActivity.this);
-            builder.setTitle("Save your highscore");
-            builder.setMessage("Your score: " + score);
-            final TextView scoreText = new TextView(PlayActivity.this);
-            scoreText.setText(String.valueOf(score));
-            final EditText username = new EditText(PlayActivity.this);
-            username.setInputType(InputType.TYPE_CLASS_TEXT);
-            builder.setView(username);
-            builder.setPositiveButton("Submit score", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //Toast.makeText(PlayActivity.this, "Success", Toast.LENGTH_LONG).show();
-                    String url = "https://mathgameapi.000webhostapp.com/api/scores/";
-                    JSONObject jsonParams = new JSONObject();
-                    try {
-                        jsonParams.put("username", username.getText().toString());
-                        jsonParams.put("score", scoreText.getText().toString());
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                            response -> Toast.makeText(PlayActivity.this, "Success", Toast.LENGTH_LONG).show(),
-                            error -> Toast.makeText(PlayActivity.this, "Error", Toast.LENGTH_LONG).show()) {
-                        @Override
-                        public byte[] getBody() throws AuthFailureError {
-                            // Convert the JSON object to byte array
-                            return jsonParams.toString().getBytes();
-                        }
-
-                        @Override
-                        public String getBodyContentType() {
-                            return "application/json";
-                        }
-                    };
-
-                    requestQueue = Volley.newRequestQueue(PlayActivity.this);
-                    requestQueue.add(stringRequest);
-                }
-            });
-
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-
-            builder.show();
-
         }
 
         else {
@@ -803,6 +755,59 @@ public class PlayActivity extends AppCompatActivity {
 
         // Start a new timer with the updated duration
         startTimer();
+    }
+
+    private void showAlertDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(PlayActivity.this);
+        builder.setTitle("Save your highscore");
+        builder.setMessage("Your score: " + score);
+        final TextView scoreText = new TextView(PlayActivity.this);
+        scoreText.setText(String.valueOf(score));
+        final EditText username = new EditText(PlayActivity.this);
+        username.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(username);
+        builder.setPositiveButton("Submit score", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Toast.makeText(PlayActivity.this, "Success", Toast.LENGTH_LONG).show();
+                String url = "https://mathgameapi.000webhostapp.com/api/scores/";
+                JSONObject jsonParams = new JSONObject();
+                try {
+                    jsonParams.put("username", username.getText().toString());
+                    jsonParams.put("score", scoreText.getText().toString());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                        response -> Toast.makeText(PlayActivity.this, "Success", Toast.LENGTH_LONG).show(),
+                        error -> Toast.makeText(PlayActivity.this, "Error", Toast.LENGTH_LONG).show()) {
+                    @Override
+                    public byte[] getBody() throws AuthFailureError {
+                        // Convert the JSON object to byte array
+                        return jsonParams.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+                };
+
+                requestQueue = Volley.newRequestQueue(PlayActivity.this);
+                requestQueue.add(stringRequest);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 }
 
