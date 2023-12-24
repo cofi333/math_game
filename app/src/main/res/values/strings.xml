@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Quick Math</string>
     <string name="help">Help</string>
     <string name="play">Play</string>
     <string name="high_scores">High scores</string>
