@@ -36,9 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private  Button backButton;
     public Button highScoresButton;
     public ImageView infoButton;
-
-    //TODO replace this with actual higcore activity
-    public Button EHBtn;
     private String TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -49,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         helpButton = findViewById(R.id.help_button);
         highScoresButton = findViewById(R.id.high_scores_button);
         infoButton = findViewById(R.id.info_button);
-        EHBtn = findViewById(R.id.enter_high_score); //To be removed -- TESTING ONLY
 
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,16 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 new GetScores().execute();
             }
         });
-
-        //To be removed -- TESTING ONLY
-        EHBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, DummyActivity.class);
-                startActivity(intent);
-            }
-        });
-        //To be removed -- TESTING ONLY
     }
 
     private class  GetScores extends AsyncTask<Void, Void, Void>{
@@ -125,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void showPopupWindow(String whatExecute) {
-        EHBtn.setClickable(false);
         infoButton.setClickable(false);
 
 
@@ -212,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                EHBtn.setClickable(true);
                 infoButton.setClickable(true);
 
             }
