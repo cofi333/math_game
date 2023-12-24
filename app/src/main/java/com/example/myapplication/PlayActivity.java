@@ -377,6 +377,8 @@ public class PlayActivity extends AppCompatActivity {
 
     }
 
+
+
     public void toMenu()
     {
 
@@ -578,6 +580,13 @@ public class PlayActivity extends AppCompatActivity {
 
 
 
+    }
+
+    /** @noinspection deprecation*/
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        toMenu();
     }
 
     @Override
