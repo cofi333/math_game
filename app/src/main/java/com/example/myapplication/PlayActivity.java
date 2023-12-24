@@ -27,6 +27,8 @@ import androidx.core.content.ContextCompat;
 
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
+import org.w3c.dom.Text;
+
 import java.util.Random;
 
 public class PlayActivity extends AppCompatActivity {
@@ -206,7 +208,10 @@ public class PlayActivity extends AppCompatActivity {
         else if(whatTask2 == 101) {
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupView = inflater.inflate(R.layout.share_your_score, null);
+            TextView scoreTextView = popupView.findViewById(R.id.finalScore);
+            scoreTextView.setText("Final score: \n" + score);
         }
+
         else {
             inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupView = inflater.inflate(R.layout.popup_layout, null);
