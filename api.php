@@ -36,7 +36,7 @@ if ($method === 'post' and !empty($table)) {
 	$name = $postData['username'] ?? "";
 	$price = $postData['score'] ?? "";
 
-    if (!is_numeric($name) AND is_numeric($price)) {
+    if ((!is_numeric($name) AND !empty($name)) AND is_numeric($price)) {
         $insertData = insertData($table, $postData);
 
         $message = $insertData ? "Data inserted successfully." : "Failed to insert data.";
