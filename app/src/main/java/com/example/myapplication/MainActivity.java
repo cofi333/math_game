@@ -125,9 +125,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void showPopupWindow(String whatExecute) {
-
-
-
         EHBtn.setClickable(false);
         infoButton.setClickable(false);
 
