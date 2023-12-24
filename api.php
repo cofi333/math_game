@@ -33,7 +33,7 @@ if (!in_array($table, $tables)) {
 
 if ($method === 'post' and !empty($table)) {
     $postData = json_decode(file_get_contents("php://input"), true);
-	$name = $postData['username'] ?? "User_".mtrand(1000, 9999);
+	$name = $postData['username'] ?? "User" . "-" . mt_rand(1000, 9999);
 	$price = $postData['score'] ?? "";
 
     if (!is_numeric($name) AND is_numeric($price)) {
