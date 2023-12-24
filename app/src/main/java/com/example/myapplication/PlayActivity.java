@@ -200,9 +200,7 @@ public class PlayActivity extends AppCompatActivity {
             endGameBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     toMenu();
-
                 }
             });
 
@@ -798,6 +796,8 @@ public class PlayActivity extends AppCompatActivity {
 
                 requestQueue = Volley.newRequestQueue(PlayActivity.this);
                 requestQueue.add(stringRequest);
+
+                toMenu();
             }
         });
 
