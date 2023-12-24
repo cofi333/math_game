@@ -241,8 +241,8 @@ public class PlayActivity extends AppCompatActivity {
                     }
 
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                            response -> Toast.makeText(PlayActivity.this, "Success", Toast.LENGTH_LONG).show(),
-                            error -> Toast.makeText(PlayActivity.this, "Error", Toast.LENGTH_LONG).show()) {
+                            response -> Toast.makeText(PlayActivity.this, "Your score has been recorded", Toast.LENGTH_LONG).show(),
+                            error -> Toast.makeText(PlayActivity.this, "Please enter your username", Toast.LENGTH_LONG).show()) {
                         @Override
                         public byte[] getBody() throws AuthFailureError {
                             // Convert the JSON object to byte array
