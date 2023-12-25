@@ -93,7 +93,7 @@
             let data = apiResponse.data;
             //tableBody.html(``);
             for (let i = 0; i < data.length; ++i) {
-              tableBody.html(`
+              tableBody.append(`
                         <tr>
                             <td>${i + 1}</td>
                             <td>${data[i]["username"]}</td>
@@ -107,8 +107,7 @@
             );
           }
         },
-        error: function (apiResponse) {
-          console.log(apiResponse);
+        error: function () {
           tableBody.append(
             `<tr><td class="text-center" colspan="4">Something went wrong, please refresh the page</td></tr>`
           );
