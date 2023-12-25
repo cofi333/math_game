@@ -32,9 +32,5 @@
         <activity android:name=".PlayActivity" />
         <activity android:name=".PauseActivity"/>
         <activity android:name=".ScoreActivity"/>
-
-        <!-- TO BE REMOVED - TESTING ONLY -->
-        <activity android:name=".DummyActivity"/>
-        <!-- TO BE REMOVED - TESTING ONLY -->
     </application>
 </manifest>

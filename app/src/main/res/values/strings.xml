@@ -20,4 +20,6 @@
     <string name="enter_your_name">Enter your name</string>
     <string name="submit">Submit</string>
     <string name="share_your_score">Share your score</string>
+    <string name="rapid_math_score_table">Rapid Math Score Table</string>
+    <string name="user_score">User: score</string>
 </resources>
