@@ -2,9 +2,9 @@
 
 const PARAMS = [
     "HOST" => 'localhost',
-    "USER" => 'root',
-    "PASSWORD" => '',
-    "DB" => 'highscores',
+    "USER" => 'id21697225_admin',
+    "PASSWORD" => 'Adminapi1-',
+    "DB" => 'id21697225_mathapigame',
     "CHARSET" => 'utf8mb4'
 ];
 

@@ -33,11 +33,15 @@ if (!in_array($table, $tables)) {
 
 if ($method === 'post' and !empty($table)) {
     $postData = json_decode(file_get_contents("php://input"), true);
-	$name = $postData['username'] ?? "User" . "-" . mt_rand(1000, 9999);
+	$name = empty($postData['username']) ? "User_".mt_rand(1000, 9999) : $postData['username'];
 	$price = $postData['score'] ?? "";
+    $newPostData = [
+        'username' => $name,
+        'score' => $price
+    ];
 
     if (!is_numeric($name) AND is_numeric($price)) {
-        $insertData = insertData($table, $postData);
+        $insertData = insertData($table, $newPostData);
 
         $message = $insertData ? "Data inserted successfully." : "Failed to insert data.";
 
