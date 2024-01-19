@@ -22,4 +22,5 @@
     <string name="share_your_score">Share your score</string>
     <string name="rapid_math_score_table">Rapid Math Score Table</string>
     <string name="user_score">User: score</string>
+    <string name="score_table">Score table</string>
 </resources>
